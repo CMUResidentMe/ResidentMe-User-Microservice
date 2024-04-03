@@ -44,7 +44,11 @@ exports.login = async ({ username, password }) => {
       throw new Error("Password incorrect");
     }
     const token = generateJWT(user);
-    return token;
+
+    return {
+      token: token,
+      privilege: user.privilege,
+    };
   } catch (error) {
     throw new Error(error.message);
   }
