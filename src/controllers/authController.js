@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const generateJWT = (user) => {
-  return jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: "6h" });
 };
 
 exports.register = async ({
@@ -12,6 +12,7 @@ exports.register = async ({
   firstName,
   lastName,
   roomNumber,
+  privilege,
 }) => {
   try {
     if (
@@ -39,7 +40,7 @@ exports.register = async ({
       firstName,
       lastName,
       roomNumber,
-      privilege: "resident",
+      privilege,
     });
 
     await newUser.save();

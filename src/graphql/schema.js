@@ -2,11 +2,17 @@ const { buildSchema } = require("graphql");
 const { register, login } = require("../controllers/authController");
 
 const schema = buildSchema(`
+  enum PrivilegeType{
+    manager
+    staff
+    resident
+  }
+
   type Query {
     getUser(username: String!): User
   }
   type Mutation {
-    register(username: String!, password: String!, firstName: String!, lastName: String!, roomNumber: Int!): String
+    register(username: String!, password: String!, firstName: String!, lastName: String!, roomNumber: Int, privilege: PrivilegeType): String
     login(username: String!, password: String!): AuthResponse
   }
   type User {
@@ -14,7 +20,7 @@ const schema = buildSchema(`
     firstName: String
     lastName: String
     roomNumber: Int
-    privilege: String
+    privilege: PrivilegeType
   }
   type AuthResponse {
     token: String
@@ -25,8 +31,8 @@ const schema = buildSchema(`
 const User = require("../models/User");
 
 const root = {
-  register: ({ username, password, firstName, lastName, roomNumber }) => {
-    return register({ username, password, firstName, lastName, roomNumber });
+  register: ({ username, password, firstName, lastName, roomNumber, privilege}) => {
+    return register({ username, password, firstName, lastName, roomNumber, privilege });
   },
   login: async ({ username, password }) => {
     try {
