@@ -5,10 +5,10 @@ const { graphqlHTTP } = require("express-graphql");
 const { schema, root } = require("./src/graphql/schema");
 const User = require("./src/models/User");
 const PrivilegeType = require("./src/data/userData");
-
+const cors = require("cors");
 const app = express();
 app.use(express.json());
-
+app.use(cors())
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
