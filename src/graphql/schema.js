@@ -12,7 +12,7 @@ const schema = buildSchema(`
     getUser(username: String!): User
     getUserById(id: ID!): User
   }
-  
+
   type Mutation {
     register(username: String!, password: String!, firstName: String!, lastName: String!, roomNumber: Int, privilege: PrivilegeType): String
     login(username: String!, password: String!): AuthResponse
@@ -25,8 +25,9 @@ const schema = buildSchema(`
     privilege: PrivilegeType
   }
   type AuthResponse {
-    token: String
-    privilege: String
+    token: String!
+    username: String!
+    privilege: String!
   }
 `);
 
@@ -55,6 +56,7 @@ const root = {
       const response = await login({ username, password });
       return {
         token: response.token,
+        username: response.username,
         privilege: response.privilege,
       };
     } catch (error) {

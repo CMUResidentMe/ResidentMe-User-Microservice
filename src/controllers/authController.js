@@ -69,6 +69,7 @@ exports.login = async ({ username, password }) => {
     const token = generateJWT(user);
     return {
       token: token,
+      username: user.username,
       privilege: user.privilege,
     };
   } catch (error) {
