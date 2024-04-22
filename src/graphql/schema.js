@@ -1,5 +1,10 @@
 const { buildSchema } = require("graphql");
-const { register, login } = require("../controllers/authController");
+const {
+  register,
+  login,
+  getUser,
+  getUserById,
+} = require("../controllers/authController");
 
 const schema = buildSchema(`
   enum PrivilegeType{
@@ -32,8 +37,11 @@ const schema = buildSchema(`
 `);
 
 const User = require("../models/User");
+const { get } = require("http");
 
+// The root provides a resolver function for each API endpoint
 const root = {
+  // The register and login functions are defined in the authController.js file
   register: ({
     username,
     password,
@@ -63,9 +71,10 @@ const root = {
       throw new Error(error.message);
     }
   },
+  // Function to get a user by username
   getUser: async ({ username }) => {
     try {
-      const user = await User.findOne({ username }).exec();
+      const user = await getUser(username);
       if (!user) {
         throw new Error("User not found");
       }
@@ -80,9 +89,10 @@ const root = {
       throw new Error(error.message);
     }
   },
+  // Function to get a user by ID
   getUserById: async ({ id }) => {
     try {
-      const user = await User.findById(id).exec();
+      const user = await getUserById(id);
       if (!user) {
         throw new Error("User not found");
       }
